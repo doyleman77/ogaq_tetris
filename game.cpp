@@ -16,6 +16,12 @@ Game::Game(int width, int height)
 {
     screen_width = width;
     screen_height = height;
+	window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+
 };
 
+Game::~Game()
+{
+	SDL_DestroyWindow(window);
+}
 

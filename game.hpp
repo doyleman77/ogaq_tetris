@@ -1,5 +1,5 @@
 #pragma once
-#include "SDL2/SDL.h"
+#include "SDL.h"
 #include <iostream>
 #include <map>
 #include <string>
@@ -18,7 +18,7 @@ public:
 private:
     int score;
     short fps, level;
-    int[20][10] grid;
+    int grid[20][10];
     bool running, paused;
     int screen_width, screen_height;
     SDL_Window* window;
