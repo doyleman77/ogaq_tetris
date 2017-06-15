@@ -14,6 +14,7 @@ public:
     void    play();
     void    draw();
     void    update();
+	void	load_image(std::string file);
 
 private:
     int score;
