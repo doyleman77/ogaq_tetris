@@ -26,5 +26,8 @@ private:
     SDL_Renderer* renderer;
 
     std::map<std::string, SDL_Texture*> texture_cache;
+	// core gameplay
 
+	// ui crap
+	SDL_Rect playfield; // dimensions of the playfield only. should be 320x640, typically.
 };
