@@ -1,8 +1,10 @@
 #pragma once
-#include "SDL.h"
 #include <iostream>
 #include <map>
 #include <string>
+
+#include "SDL.h"
+#include "sprite.hpp"
 
 class Game
 {
@@ -20,6 +22,7 @@ private:
     int score;
     short fps, level;
     int grid[20][10];
+	Sprite grid[20][10];
     bool running, paused;
     int screen_width, screen_height;
     SDL_Window* window;
