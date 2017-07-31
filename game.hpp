@@ -3,8 +3,20 @@
 #include <map>
 #include <string>
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "sprite.hpp"
+
+
+enum BlockColor
+{
+    RED = 0,
+    ORANGE,
+    GREEN,
+    PURPLE,
+    BLUE,
+    YELLOW,
+    CYAN
+};
 
 class Game
 {
@@ -17,12 +29,15 @@ public:
     void    draw();
     void    update();
 	void	load_image(std::string file);
+    void    setup();
 
 private:
     int score;
     short fps, level;
     int grid[20][10];
-	Sprite grid[20][10];
+    SDL_Rect tetri[8];
+
+	//Sprite grid[20][10];
     bool running, paused;
     int screen_width, screen_height;
     SDL_Window* window;

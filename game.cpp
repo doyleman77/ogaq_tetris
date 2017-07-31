@@ -15,11 +15,22 @@ Game::Game()
 	playfield.w = 320;
 	playfield.h = 640;
 
-	for (int x = 0; x < 20; x++)
-		for (int y = 0; x < 10; x++)
-			grid[x][y] = 0;
+    /// init grid
+	for (int y = 0; y < 20; y++)
+		for (int x = 0; x < 10; x++)
+			grid[y][x] = 0;
+
     window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    /// Load Tetris and store
+	for(int i = 0; i < 8; i++)
+	{
+        tetri[i].w = 32;
+        tetri[i].h = 32;
+        tetri[i].y = 0;
+        tetri[i].x = 32*i;
+	}
 }
 
 Game::Game(int width, int height)
@@ -38,12 +49,13 @@ Game::~Game()
 
 void Game::load_image(std::string file)
 {
-	const std::string path = "../assets/images/";
+	const std::string path = "./assets/images/";
 	const std::string fullpath = path + file + ".bmp";
 	SDL_Surface* temp_surface = SDL_LoadBMP(fullpath.c_str());
 	if (!temp_surface)
 	{
 		std::cout << SDL_GetError() << " " << SDL_GetBasePath() << std::endl;
+		//std::cin.get();
 	}
 	SDL_Texture* new_texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
 	SDL_FreeSurface(temp_surface);
@@ -61,13 +73,27 @@ void Game::draw()
 	bg_printer.x = 0;
 	bg_printer.y = 0;
 
-	SDL_QueryTexture(texture_cache["bg_tetro"], NULL, NULL, &bg_printer.w, &bg_printer.h);
+    ///test
+    //int iter = 0;
 
-	for (bg_printer.x = playfield.x; bg_printer.x < (playfield.x + playfield.w); bg_printer.x += bg_printer.w)
-		for (bg_printer.y = playfield.y; bg_printer.y < (playfield.y + playfield.h); bg_printer.y += bg_printer.h)
+
+	bg_printer.w = bg_printer.h = 32;
+
+	/// we can do better here. use simple iterators and increase printer dimensions along with iters.
+	for (int y = 0; y < 20; y++, bg_printer.y += bg_printer.h)
+	{
+        bg_printer.x = 0;
+		for (int x = 0; x < 10; x++, bg_printer.x += bg_printer.w)
 		{
-			SDL_RenderCopy(renderer, texture_cache["bg_tetro"], NULL, &bg_printer);
+
+
+			SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[grid[y][x]], &bg_printer);
+			//if((bg_printer.x/32)%2==0) SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[(bg_printer.x/32)%6], &bg_printer);*/
+
+			//SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[iter%7], &bg_printer);
+            //iter++;
 		}
+    }
 
 	//draw end
 	SDL_RenderPresent(renderer);
@@ -78,17 +104,26 @@ void Game::update()
 
 }
 
+void Game::setup()
+{
+
+}
+
 void Game::play()
 {
 	SDL_Event eventhandle;
 	bool running = true;
+	grid[19][5] = grid[19][6] = grid[19][4] = grid[18][5] = 3;
 	while (running)
 	{
 		while (SDL_PollEvent(&eventhandle) != 0)
 		{
 			if (eventhandle.type == SDL_QUIT) running = false;
+			if (eventhandle.key.keysym.sym == SDLK_ESCAPE) running = false;
 		}
 		update();
 		draw();
+		/// RUDIMENTARY DELAY
+		SDL_Delay(16);
 	}
 }
