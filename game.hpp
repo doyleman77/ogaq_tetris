@@ -3,7 +3,14 @@
 #include <map>
 #include <string>
 
-#include "SDL2/SDL.h"
+#ifdef _WIN32
+#include "SDL.h"
+#endif
+
+#ifndef _WIN32
+#include "SDL2/SDL.h"	
+#endif
+
 #include "sprite.hpp"
 
 
@@ -34,6 +41,7 @@ public:
 private:
     int score;
     short fps, level;
+	short drop_time;
     int grid[20][10];
     SDL_Rect tetri[8];
 

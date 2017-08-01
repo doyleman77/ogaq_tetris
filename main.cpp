@@ -1,5 +1,12 @@
 #include <iostream>
-#include "SDL2/SDL.h"
+
+#ifdef _WIN32
+#include "SDL.h"
+#endif
+
+#ifndef _WIN32
+#include "SDL2/SDL.h"	
+#endif
 
 #include "game.hpp"
 int main(int argc, char* args[])

@@ -49,8 +49,9 @@ Game::~Game()
 
 void Game::load_image(std::string file)
 {
-	const std::string path = "./assets/images/";
+	const std::string path = "../assets/images/";
 	const std::string fullpath = path + file + ".bmp";
+
 	SDL_Surface* temp_surface = SDL_LoadBMP(fullpath.c_str());
 	if (!temp_surface)
 	{
@@ -70,8 +71,8 @@ void Game::draw()
 
 	//-BG render
 	SDL_Rect bg_printer;
-	bg_printer.x = 0;
-	bg_printer.y = 0;
+	bg_printer.x = playfield.x;
+	bg_printer.y = playfield.y;
 
     ///test
     //int iter = 0;
@@ -79,19 +80,15 @@ void Game::draw()
 
 	bg_printer.w = bg_printer.h = 32;
 
-	/// we can do better here. use simple iterators and increase printer dimensions along with iters.
 	for (int y = 0; y < 20; y++, bg_printer.y += bg_printer.h)
 	{
-        bg_printer.x = 0;
+        bg_printer.x = playfield.x;
 		for (int x = 0; x < 10; x++, bg_printer.x += bg_printer.w)
 		{
-
-
+			//display the current grid
 			SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[grid[y][x]], &bg_printer);
-			//if((bg_printer.x/32)%2==0) SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[(bg_printer.x/32)%6], &bg_printer);*/
 
-			//SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[iter%7], &bg_printer);
-            //iter++;
+			//display the active tetronimo
 		}
     }
 
