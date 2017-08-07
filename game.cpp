@@ -49,7 +49,7 @@ Game::~Game()
 
 void Game::load_image(std::string file)
 {
-	const std::string path = "../assets/images/";
+	const std::string path = "./assets/images/";
 	const std::string fullpath = path + file + ".bmp";
 
 	SDL_Surface* temp_surface = SDL_LoadBMP(fullpath.c_str());
@@ -110,7 +110,6 @@ void Game::play()
 {
 	SDL_Event eventhandle;
 	bool running = true;
-	grid[19][5] = grid[19][6] = grid[19][4] = grid[18][5] = 3;
 	while (running)
 	{
 		while (SDL_PollEvent(&eventhandle) != 0)

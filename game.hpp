@@ -8,11 +8,11 @@
 #endif
 
 #ifndef _WIN32
-#include "SDL2/SDL.h"	
+#include "SDL2/SDL.h"
 #endif
 
 #include "sprite.hpp"
-
+#include "tetronimo.hpp"
 
 enum BlockColor
 {
@@ -44,7 +44,7 @@ private:
 	short drop_time;
     int grid[20][10];
     SDL_Rect tetri[8];
-
+    Tetronimo currentPiece;
 	//Sprite grid[20][10];
     bool running, paused;
     int screen_width, screen_height;
