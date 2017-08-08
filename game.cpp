@@ -87,7 +87,7 @@ void Game::draw()
 		{
 			//display the current grid
 			SDL_RenderCopy(renderer, texture_cache["blocks2"], &tetri[grid[y][x]], &bg_printer);
-
+            currentPiece->draw(this->renderer);
 			//display the active tetronimo
 		}
     }
@@ -98,7 +98,7 @@ void Game::draw()
 
 void Game::update()
 {
-
+    currentPiece->update();
 }
 
 void Game::setup()
@@ -110,6 +110,8 @@ void Game::play()
 {
 	SDL_Event eventhandle;
 	bool running = true;
+	currentPiece = new Tetronimo(this->texture_cache["blocks2"]);
+	currentPiece->construct_piece(Shape::T);
 	while (running)
 	{
 		while (SDL_PollEvent(&eventhandle) != 0)
