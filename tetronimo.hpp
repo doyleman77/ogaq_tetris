@@ -27,7 +27,7 @@ class Tetronimo
         Tetronimo(Shape);
         ~Tetronimo();
 		void	construct_piece(Shape);
-        void    update();
+        void    update(int time_passed);
 		void	move_left();
 		void	move_right();
 		void	rotate();
@@ -38,5 +38,6 @@ class Tetronimo
 		int rotation;
         int x, y, x_offset, y_offset;
         int shape[4][4];
-		short update_time;
+        Shape tetro_shape;
+		int update_time;
 };

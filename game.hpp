@@ -40,8 +40,10 @@ public:
 
 private:
     int score;
-    short fps, level;
-	short drop_time;
+    int fps, level;
+	int drop_time;
+	int delta_time, previous_tick_time;
+
     int grid[20][10];
     SDL_Rect tetri[8];
     Tetronimo* currentPiece;

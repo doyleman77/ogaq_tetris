@@ -31,6 +31,9 @@ Game::Game()
         tetri[i].y = 0;
         tetri[i].x = 32*i;
 	}
+
+	previous_tick_time = SDL_GetTicks();
+	delta_time = 0;
 }
 
 Game::Game(int width, int height)
@@ -98,7 +101,7 @@ void Game::draw()
 
 void Game::update()
 {
-    currentPiece->update();
+    currentPiece->update(delta_time);
 }
 
 void Game::setup()
@@ -111,9 +114,10 @@ void Game::play()
 	SDL_Event eventhandle;
 	bool running = true;
 	currentPiece = new Tetronimo(this->texture_cache["blocks2"]);
-	currentPiece->construct_piece(Shape::T);
+	currentPiece->construct_piece(Shape::Z);
 	while (running)
 	{
+        previous_tick_time = SDL_GetTicks();
 		while (SDL_PollEvent(&eventhandle) != 0)
 		{
 			if (eventhandle.type == SDL_QUIT) running = false;
@@ -123,5 +127,7 @@ void Game::play()
 		draw();
 		/// RUDIMENTARY DELAY
 		SDL_Delay(16);
+		delta_time = SDL_GetTicks() - previous_tick_time;
+
 	}
 }
