@@ -27,6 +27,7 @@ void Tetronimo::construct_piece(Shape eshape)
     x = 3;
     y = -1;
     rotation = 0;
+    placed = false;
     ///hardcoded because i hate tetris atm
     x_offset = y_offset = 12;
 
@@ -78,6 +79,7 @@ void Tetronimo::update(int passed_time)
     {
         update_time -= 1500;
         y++;
+        if(collision_check()) y--;
     }
 }
 
@@ -99,12 +101,28 @@ void Tetronimo::draw(SDL_Renderer* renderer)
 
 void Tetronimo::move_left()
 {
-
+    if(placed) return;
+    x--;
+    if(collision_check()) x++;
 }
 
 void Tetronimo::move_right()
 {
+    if(placed) return;
+    x++;
+    if(collision_check()) x--;
+}
 
+void Tetronimo::move_down()
+{
+    y++;
+    if(collision_check())
+    {
+        y--;
+        placed = true;
+        return;
+    }
+    update_time = 0;
 }
 
 void Tetronimo::rotate()
@@ -126,4 +144,17 @@ void Tetronimo::rotate()
 	case Shape::T:
 		break;
     }
+}
+
+
+bool Tetronimo::collision_check()
+{
+    for(int x = 0; x < 4; x++)
+        for(int y = 0; y < 4; y++)
+        {
+            ///check for wall
+            if(shape[x][y] > 0 && ((this->x + x + 1 > 10) || (this->x + x < 0))) return true;
+            ///check for floor
+            if(shape[x][y] > 0 && (this->y + y == 20)) return true;
+        }
 }

@@ -43,7 +43,7 @@ private:
     int fps, level;
 	int drop_time;
 	int delta_time, previous_tick_time;
-
+    bool key_right, key_left, key_down, key_up;
     int grid[20][10];
     SDL_Rect tetri[8];
     Tetronimo* currentPiece;

@@ -34,6 +34,8 @@ Game::Game()
 
 	previous_tick_time = SDL_GetTicks();
 	delta_time = 0;
+
+	key_left = key_right = key_up = key_down = false;
 }
 
 Game::Game(int width, int height)
@@ -101,7 +103,11 @@ void Game::draw()
 
 void Game::update()
 {
+    if (key_right) currentPiece->move_right();
+    if (key_left) currentPiece->move_left(); ///why do i use snake_case and camelCase? standardize. also, name directions better.
+    if (key_down) currentPiece->move_down();
     currentPiece->update(delta_time);
+
 }
 
 void Game::setup()
@@ -117,11 +123,18 @@ void Game::play()
 	currentPiece->construct_piece(Shape::Z);
 	while (running)
 	{
+        key_left = key_right = key_up = key_down = false;
         previous_tick_time = SDL_GetTicks();
 		while (SDL_PollEvent(&eventhandle) != 0)
 		{
 			if (eventhandle.type == SDL_QUIT) running = false;
 			if (eventhandle.key.keysym.sym == SDLK_ESCAPE) running = false;
+			if (eventhandle.type == SDL_KEYDOWN)
+			{
+                if (eventhandle.key.keysym.sym == SDLK_LEFT) key_left = true;
+                if (eventhandle.key.keysym.sym == SDLK_RIGHT) key_right = true;
+                if (eventhandle.key.keysym.sym == SDLK_DOWN) key_down = true;
+			}
 		}
 		update();
 		draw();

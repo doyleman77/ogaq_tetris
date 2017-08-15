@@ -30,6 +30,7 @@ class Tetronimo
         void    update(int time_passed);
 		void	move_left();
 		void	move_right();
+		void    move_down();
 		void	rotate();
 		void    draw(SDL_Renderer* renderer);
     private:
@@ -40,4 +41,8 @@ class Tetronimo
         int shape[4][4];
         Shape tetro_shape;
 		int update_time;
+        bool placed;
+
+		bool collision_check();
+
 };
