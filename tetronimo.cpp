@@ -1,6 +1,6 @@
 #include "tetronimo.hpp"
 
-Tetronimo::Tetronimo(SDL_Texture* tex)
+Tetronimo::Tetronimo(SDL_Texture* tex, int grid[20][10])
 {
 	for (int x = 0; x < 4; x++)
 		for (int y = 0; y < 4; y++)
@@ -10,6 +10,7 @@ Tetronimo::Tetronimo(SDL_Texture* tex)
 	texture_rect.x = texture_rect.y = 0;
 	texture_rect.w = texture_rect.h = 32;
 	update_time = 0;
+	board = grid;
 }
 
 Tetronimo::Tetronimo(Shape)
@@ -120,6 +121,22 @@ void Tetronimo::move_down()
     {
         y--;
         placed = true;
+
+        ///copy data of tetronimo to board
+        for(int cx = 0; cx < 4; cx++)
+            for(int cy = 0; cy < 4; cy++)
+            {
+                if(this->y + cy < 20)
+                {
+                    if(cx + this->x < 10)
+                    {
+                        if(shape[cx][cy] > 0) ///dont want to blank out spaces.
+                            board[y + cy][x + cx] = shape[cx][cy];
+                    }
+                }
+            }
+        Shape new_shape = (Shape)(rand()%7);
+        construct_piece(new_shape);
         return;
     }
     update_time = 0;
@@ -156,5 +173,9 @@ bool Tetronimo::collision_check()
             if(shape[x][y] > 0 && ((this->x + x + 1 > 10) || (this->x + x < 0))) return true;
             ///check for floor
             if(shape[x][y] > 0 && (this->y + y == 20)) return true;
+            ///check for board
+            if(this->y + y < 20+1)
+                if(this->x + x < 10+1)
+                    if(shape[x][y] > 0 && board[this->y + y][this->x + x] > 0) return true;
         }
 }

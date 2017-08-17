@@ -23,7 +23,7 @@ enum Shape
 class Tetronimo
 {
     public:
-		Tetronimo(SDL_Texture* tex);
+		Tetronimo(SDL_Texture* tex, int board[20][10]);
         Tetronimo(Shape);
         ~Tetronimo();
 		void	construct_piece(Shape);
@@ -42,7 +42,7 @@ class Tetronimo
         Shape tetro_shape;
 		int update_time;
         bool placed;
-
+        int (*board)[10];
 		bool collision_check();
 
 };

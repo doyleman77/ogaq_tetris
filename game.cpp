@@ -119,8 +119,10 @@ void Game::play()
 {
 	SDL_Event eventhandle;
 	bool running = true;
-	currentPiece = new Tetronimo(this->texture_cache["blocks2"]);
-	currentPiece->construct_piece(Shape::Z);
+	currentPiece = new Tetronimo(this->texture_cache["blocks2"], grid);
+	///currentPiece->construct_piece(Shape::Z);
+	Shape start_piece = (Shape)(rand()%7);
+	currentPiece->construct_piece(start_piece);
 	while (running)
 	{
         key_left = key_right = key_up = key_down = false;
