@@ -142,6 +142,7 @@ void Tetronimo::rotate()
     if(!collision_check()) return;
 
     if(rotation > 0)rotation--;
+    if(rotation == 0) rotation = 3;
     attempt_rotate();
 }
 
