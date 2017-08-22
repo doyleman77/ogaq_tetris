@@ -36,13 +36,11 @@ void Tetronimo::construct_piece(Shape eshape)
         for(int y = 0; y < 4; y++)
             shape[x][y] = 0;
 
+    tetro_shape = eshape;
 	switch (eshape)
 	{
-
-	tetro_shape = eshape;
-
 	case Shape::I:
-        shape[1][0] = shape[1][1] = shape[1][2] = shape[1][3] = 1;
+        shape[0][1] = shape[1][1] = shape[2][1] = shape[3][1] = 1;
         texture_rect.x = 32;
         y = 0;
 		break;
@@ -59,11 +57,11 @@ void Tetronimo::construct_piece(Shape eshape)
 		texture_rect.x = 32*4;
 		break;
 	case Shape::S:
-        shape[0][2] = shape[1][1] = shape[1][2] = shape[2][1] = 5;
+        shape[1][2] = shape[2][2] = shape[2][1] = shape[3][1] = 5;
 		texture_rect.x = 32*5;
 		break;
 	case Shape::Z:
-        shape[0][1] = shape[1][1] = shape[1][2] = shape[2][2] = 6;
+        shape[1][1] = shape[2][1] = shape[2][2] = shape[3][2] = 6;
 		texture_rect.x = 32*6;
 		break;
 	case Shape::T:
@@ -79,8 +77,7 @@ void Tetronimo::update(int passed_time)
     if(update_time > 1500)
     {
         update_time -= 1500;
-        y++;
-        if(collision_check()) y--;
+        move_down();
     }
 }
 
@@ -126,14 +123,9 @@ void Tetronimo::move_down()
         for(int cx = 0; cx < 4; cx++)
             for(int cy = 0; cy < 4; cy++)
             {
-                if(this->y + cy < 20)
-                {
-                    if(cx + this->x < 10)
-                    {
-                        if(shape[cx][cy] > 0) ///dont want to blank out spaces.
+                if(shape[cx][cy] > 0) ///dont want to blank out spaces.
                             board[y + cy][x + cx] = shape[cx][cy];
-                    }
-                }
+
             }
         Shape new_shape = (Shape)(rand()%7);
         construct_piece(new_shape);
@@ -144,25 +136,96 @@ void Tetronimo::move_down()
 
 void Tetronimo::rotate()
 {
+
+    rotation++;
+    attempt_rotate();
+    if(!collision_check()) return;
+
+    if(rotation > 0)rotation--;
+    attempt_rotate();
+}
+
+bool Tetronimo::attempt_rotate()
+{
+    for(int x = 0; x < 4; x++)
+        for(int y = 0; y < 4; y++)
+            shape[x][y] = 0;
+    if(rotation > 3) rotation = 0;
+
     switch(tetro_shape)
     {
     case Shape::I:
+        ///if(rotation > 1) rotation = 0;
+        if(rotation == 0)
+            shape[0][1] = shape[1][1] = shape[2][1] = shape[3][1] = 1;
+        if(rotation == 1)
+            shape[2][0] = shape[2][1] = shape[2][2] = shape[2][3] = 1;
+        if(rotation == 2)
+            shape[0][1] = shape[1][1] = shape[2][1] = shape[3][1] = 1;
+        if(rotation == 3)
+            shape[2][0] = shape[2][1] = shape[2][2] = shape[2][3] = 1;
 		break;
 	case Shape::J:
+        if(rotation == 0)
+            shape[1][1] = shape[2][1] = shape[3][1] = shape[3][2] = 2;
+        if(rotation == 1)
+            shape[2][0] = shape[3][0] = shape[2][1] = shape[2][2] = 2;
+        if(rotation == 2)
+            shape[1][0] = shape[1][1] = shape[2][1] = shape[3][1] = 2;
+        if(rotation == 3)
+            shape[2][0] = shape[2][1] = shape[2][2] = shape[1][2] = 2;
 		break;
 	case Shape::L:
+        if(rotation == 0)
+            shape[1][1] = shape[2][1] = shape[3][1] = shape[1][2] = 3;
+        if(rotation == 1)
+            shape[2][0] = shape[2][1] = shape[2][2] = shape[3][2] = 3;
+        if(rotation == 2)
+            shape[1][1] = shape[2][1] = shape[3][1] = shape[3][0] = 3;
+        if(rotation == 3)
+            shape[1][0] = shape[2][0] = shape[2][1] = shape[2][2] = 3;
 		break;
 	case Shape::O:
+        rotation = 0;
+        if(rotation == 0)
+            shape[1][1] = shape[1][2] = shape[2][1] = shape[2][2] = 4;
 		break;
 	case Shape::S:
+        ///if(rotation > 1) rotation = 0;
+        if(rotation == 0)
+            shape[1][2] = shape[2][2] = shape[2][1] = shape[3][1] = 5;
+        if(rotation == 1)
+            shape[2][0] = shape[2][1] = shape[3][1] = shape[3][2] = 5;
+        if(rotation == 2)
+            shape[1][2] = shape[2][2] = shape[2][1] = shape[3][1] = 5;
+        if(rotation == 3)
+            shape[2][0] = shape[2][1] = shape[3][1] = shape[3][2] = 5;
 		break;
 	case Shape::Z:
+        ///if(rotation > 1) rotation = 0;
+        if(rotation == 0)
+            shape[1][1] = shape[2][1] = shape[2][2] = shape[3][2] = 6;
+        if(rotation == 1)
+            shape[3][0] = shape[3][1] = shape[2][1] = shape[2][2] = 6;
+        if(rotation == 2)
+            shape[1][1] = shape[2][1] = shape[2][2] = shape[3][2] = 6;
+        if(rotation == 3)
+            shape[3][0] = shape[3][1] = shape[2][1] = shape[2][2] = 6;
 		break;
 	case Shape::T:
+        if(rotation == 0)
+            shape[1][1] = shape[2][1] = shape[2][2] = shape[3][1] = 7;
+        if(rotation == 1)
+            shape[2][0] = shape[2][1] = shape[2][2] = shape[3][1] = 7;
+        if(rotation == 2)
+            shape[1][1] = shape[2][1] = shape[2][0] = shape[3][1] = 7;
+        if(rotation == 3)
+            shape[2][0] = shape[2][1] = shape[2][2] = shape[1][1] = 7;
 		break;
     }
-}
 
+    //return !collision_check();
+}
 
 bool Tetronimo::collision_check()
 {
@@ -170,12 +233,14 @@ bool Tetronimo::collision_check()
         for(int y = 0; y < 4; y++)
         {
             ///check for wall
-            if(shape[x][y] > 0 && ((this->x + x + 1 > 10) || (this->x + x < 0))) return true;
+            ///i believe the problem of wall sticking to be here.
+            if(shape[x][y] > 0)
+                if((this->x + x+1 > 10) || (this->x + x < 0)) return true;
             ///check for floor
             if(shape[x][y] > 0 && (this->y + y == 20)) return true;
             ///check for board
-            if(this->y + y < 20+1)
-                if(this->x + x < 10+1)
-                    if(shape[x][y] > 0 && board[this->y + y][this->x + x] > 0) return true;
+            if(shape[x][y] > 0)
+                if(board[this->y + y][this->x + x] > 0) return true;
         }
+        return false;
 }

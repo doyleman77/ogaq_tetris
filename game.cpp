@@ -103,6 +103,7 @@ void Game::draw()
 
 void Game::update()
 {
+    if (key_up) currentPiece->rotate();
     if (key_right) currentPiece->move_right();
     if (key_left) currentPiece->move_left(); ///why do i use snake_case and camelCase? standardize. also, name directions better.
     if (key_down) currentPiece->move_down();
@@ -136,6 +137,7 @@ void Game::play()
                 if (eventhandle.key.keysym.sym == SDLK_LEFT) key_left = true;
                 if (eventhandle.key.keysym.sym == SDLK_RIGHT) key_right = true;
                 if (eventhandle.key.keysym.sym == SDLK_DOWN) key_down = true;
+                if (eventhandle.key.keysym.sym == SDLK_UP) key_up = true;
 			}
 		}
 		update();

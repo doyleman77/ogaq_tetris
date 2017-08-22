@@ -43,6 +43,7 @@ class Tetronimo
 		int update_time;
         bool placed;
         int (*board)[10];
-		bool collision_check();
 
+		bool collision_check();
+        bool attempt_rotate();
 };
