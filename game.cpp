@@ -36,6 +36,7 @@ Game::Game()
 	delta_time = 0;
 
 	key_left = key_right = key_up = key_down = false;
+	lines = level = 0;
 }
 
 Game::Game(int width, int height)
@@ -108,12 +109,43 @@ void Game::update()
     if (key_left) currentPiece->move_left(); ///why do i use snake_case and camelCase? standardize. also, name directions better.
     if (key_down) currentPiece->move_down();
     currentPiece->update(delta_time);
-
+    if(currentPiece->is_placed())
+    {
+        ///clear lines
+        clear_lines();
+        Shape new_shape = (Shape)(rand()%7);
+        currentPiece->construct_piece(new_shape);
+    }
 }
 
 void Game::setup()
 {
 
+}
+
+void Game::clear_lines()
+{
+
+    for(int y = 0; y < 20; y++)
+    {
+        int row_total = 0;
+        for(int x = 0; x < 10; x++)
+        {
+            row_total += (bool)grid[y][x];
+        }
+        if(row_total >= 10) ///we have a full line
+        {
+            lines++;
+            level = lines/10;
+            currentPiece->set_drop_time(1000-(level*50));
+            std::cout << lines << " " << level << std::endl;
+            for(int ny = y; ny > 0; ny--)
+                for(int x = 0; x < 10; x++)
+                {
+                    grid[ny][x] = grid[ny-1][x];
+                }
+        }
+    }
 }
 
 void Game::play()

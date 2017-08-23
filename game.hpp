@@ -39,8 +39,7 @@ public:
     void    setup();
 
 private:
-    int score;
-    int fps, level;
+    int fps, level, lines;
 	int drop_time;
 	int delta_time, previous_tick_time;
     bool key_right, key_left, key_down, key_up;
@@ -58,4 +57,5 @@ private:
 
 	// ui crap
 	SDL_Rect playfield; // dimensions of the playfield only. should be 320x640, typically.
+	void clear_lines();
 };

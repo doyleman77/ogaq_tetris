@@ -11,6 +11,7 @@ Tetronimo::Tetronimo(SDL_Texture* tex, int grid[20][10])
 	texture_rect.w = texture_rect.h = 32;
 	update_time = 0;
 	board = grid;
+	drop_time = 1000;
 }
 
 Tetronimo::Tetronimo(Shape)
@@ -69,14 +70,14 @@ void Tetronimo::construct_piece(Shape eshape)
 		texture_rect.x = 32*7;
 		break;
 	}
+    SDL_Delay(250);
 }
 
 void Tetronimo::update(int passed_time)
 {
     update_time += passed_time;
-    if(update_time > 1500)
+    if(update_time > drop_time)
     {
-        update_time -= 1500;
         move_down();
     }
 }
@@ -127,8 +128,7 @@ void Tetronimo::move_down()
                             board[y + cy][x + cx] = shape[cx][cy];
 
             }
-        Shape new_shape = (Shape)(rand()%7);
-        construct_piece(new_shape);
+
         return;
     }
     update_time = 0;
@@ -142,7 +142,7 @@ void Tetronimo::rotate()
     if(!collision_check()) return;
 
     if(rotation > 0)rotation--;
-    if(rotation == 0) rotation = 3;
+    else if(rotation == 0) rotation = 3;
     attempt_rotate();
 }
 
@@ -244,4 +244,15 @@ bool Tetronimo::collision_check()
                 if(board[this->y + y][this->x + x] > 0) return true;
         }
         return false;
+}
+
+bool Tetronimo::is_placed()
+{
+    return placed;
+}
+
+void Tetronimo::set_drop_time(int time)
+{
+    if(time < 100) time = 100;
+    drop_time = time;
 }

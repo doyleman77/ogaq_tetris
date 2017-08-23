@@ -33,6 +33,8 @@ class Tetronimo
 		void    move_down();
 		void	rotate();
 		void    draw(SDL_Renderer* renderer);
+		bool    is_placed();
+		void    set_drop_time(int);
     private:
         SDL_Texture* texture;
         SDL_Rect texture_rect;
@@ -41,9 +43,11 @@ class Tetronimo
         int shape[4][4];
         Shape tetro_shape;
 		int update_time;
+		int drop_time;
         bool placed;
         int (*board)[10];
 
 		bool collision_check();
         bool attempt_rotate();
+
 };
